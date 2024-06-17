@@ -126,3 +126,17 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+
+
+#VC++
+.vs/
+*.VC.db
+*.vsidx
+*.vspscc
+*.vssscc
+*.vssscc.vspscc
+*.vssscc.vspscc.lock
+*.vssscc.vspscc.lock.lock
+*.vssscc.vspscc.lock.lock.lock
+*.vssscc.vspscc.lock.lock.lock.lock
+*.vssscc.vspscc.lock.lock.lock.lock.lock
