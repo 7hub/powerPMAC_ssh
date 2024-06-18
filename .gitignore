@@ -86,6 +86,7 @@ fabric.properties
 *.slo
 *.lo
 *.o
+*.a
 *.obj
 
 # Precompiled Headers
@@ -140,3 +141,8 @@ CTestTestfile.cmake
 *.vssscc.vspscc.lock.lock.lock
 *.vssscc.vspscc.lock.lock.lock.lock
 *.vssscc.vspscc.lock.lock.lock.lock.lock
+
+
+# Doxyfile
+#
+html/
