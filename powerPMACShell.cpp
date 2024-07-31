@@ -1,10 +1,29 @@
 #include "PowerPMACcontrol.h"
 #include "argParser.h"
 #include "libssh2Driver.h"
+#include <fstream>
 #include <iostream>
 #include <string>
 
 using namespace PowerPMACcontrol_ns;
+using namespace std;
+
+int readfile(string fname) {
+  ifstream file(fname);
+
+  string line;
+
+  if (file.is_open()) {
+    while (getline(file, line)) {
+      cout << line << endl;
+    }
+    file.close();
+  } else {
+    cerr << "Unable to open file!" << endl;
+  }
+  return 0;
+}
+
 int main(int argc, char *argv[]) {
   // Get connection parameters from the command line arguments
   // Default values are defined in argParser.h
@@ -36,31 +55,46 @@ int main(int argc, char *argv[]) {
   int c;
   int counter = 0;
   char cmd[1024];
+  // int ret=0;
+
+  fstream file("./Fixtures/prog1.pmc");
 
   counter = 0;
   printf("   -- Power PMAC Shell --      \n    Type \"quit\" to end\n");
+  // do
+  // {
+  counter = 0;
+  printf("ppmac> ");
   do {
-    counter = 0;
-    printf("ppmac> ");
-    do {
-      c = getchar();
-      cmd[counter] = c;
-      counter++;
-    } while (c != '\n');
-    // Append the terminator
-    cmd[counter] = '\0';
-    if (strcmp(cmd, "quit\n")) {
-      std::string command(cmd);
-      std::string reply = "";
-      int ret = ppmaccomm->PowerPMACcontrol_sendCommand(command, reply);
-      if (ret == PowerPMACcontrol::PPMACcontrolNoError) {
-        printf("Reply from Power PMAC : [%s]\n", reply.c_str());
-      } else {
-        printf("Error from Power PMAC read/write: error number %d\n", ret);
+    c = getchar();
+    cmd[counter] = c;
+    counter++;
+  } while (c != '\n');
+  // Append the terminator
+  cmd[counter] = '\0';
+  if (strcmp(cmd, "quit\n")) {
+    std::string command(cmd);
+    std::string reply = "";
+    string line;
+    if (file.is_open()) {
+      while (getline(file, command)) {
+        cout << command << endl;
+        ret = ppmaccomm->PowerPMACcontrol_sendCommand(command, reply);
+        if (ret == PowerPMACcontrol::PPMACcontrolNoError) {
+          printf("%s", reply.c_str());
+          // printf("Reply from Power PMAC : [%s]\n", reply.c_str());
+        } else {
+          printf("Error from Power PMAC read/write: error number %d\n", ret);
+        }
+        reply.clear();
       }
+      file.close();
     }
-    // Quit if we get a quit
-  } while (strcmp(cmd, "quit\n"));
+  }
+  // Quit if we get a quit
+  // } while (strcmp(cmd, "quit\n"));
+
+  c = getchar();
 
   delete ppmaccomm;
 
